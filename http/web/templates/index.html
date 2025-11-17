@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Go Server{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Your Go Web Server!</h1>
+    <p class="hero-subtitle">A simple web application built with Go</p>
+    <div class="hero-actions">
+        <a href="/users" class="btn btn-primary">View Users</a>
+        <a href="/users/create" class="btn btn-secondary">Add New User</a>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <h3>🚀 Fast</h3>
+        <p>Built with Go for high performance</p>
+    </div>
+    <div class="feature-card">
+        <h3>🔧 Simple</h3>
+        <p>Clean, maintainable code structure</p>
+    </div>
+    <div class="feature-card">
+        <h3>📱 Responsive</h3>
+        <p>Works on all devices</p>
+    </div>
+</div>
+{% endblock %}

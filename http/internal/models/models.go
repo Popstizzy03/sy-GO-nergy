@@ -11,9 +11,9 @@ type User struct {
 }
 
 // Add methods for template formatting
-func (u User) initial() string {
+func (u User) Initial() string {
 	if len(u.Name) > 0 {
-		return string(u.name[0])
+		return string(u.Name[0])
 	}
 	return "?"
 }

@@ -90,6 +90,12 @@ func respondWithError(w http.ResponseWriter, code int, message string) {
 func NewRouter() *mux.Router {
 	router := mux.NewRouter()
 	userHandler := NewUserHandler()
+	webHandler := NewWebHandler(userHandler)
+
+	// Static files
+	router.HandleFunc("/", webHandler.HomePage).Methods("GET")
+	router.HandleFunc("/users", webHandler.UsersPage).Methods("GET")
+	router.HandleFunc("/users/create", webHandler.CreateUserPage).Methods("GET")
 	
 	// API routes
 	api := router.PathPrefix("/api/v1").Subrouter()

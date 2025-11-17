@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Users - Go Server{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>User Management</h1>
+    <a href="/users/create" class="btn btn-primary">Add New User</a>
+</div>
+
+<div class="users-grid">
+    {% if .Users }}
+        {% range .Users }}
+        <div class="user-card">
+            <div class="user-avatar">
+                {{slice .Name 0 1 | upper}}
+            </div>
+            <div class="user-info">
+                <h3>{{.Name}}</h3>
+                <p class="user-email">{{.Email}}</p>
+                <p class="user-id">ID: {{.ID}}</p>
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-small" onclick="viewUser({{.ID}})">View</button>
+            </div>
+        </div>
+        {% end %}
+    {% else %}
+        <div class="empty-state">
+            <h3>No Users Found</h3>
+            <p>Get started by adding your first user!</p>
+            <a href="/users/create" class="btn btn-primary">Add User</a>
+        </div>
+    {% end %}
+</div>
+{% endblock %}
