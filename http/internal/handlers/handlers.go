@@ -53,3 +53,18 @@ func (h *UserHandler) GetUser(w http.ResponseWrite, r *http.Request) {
 
 	respondWithJSON(w, http.StatusOK, user)
 }
+
+func (h *UserHandler) createUser(w http.ResponseWriter, r *httpRequest) {
+	var user models.User
+	if err := json.NewDecoder(r.body).Decode(&user); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	user.ID = h.nextID
+	h.users[h.nextID] = user
+	h.nextID ++
+
+	respondWithJSON(w, http.StatusCreated, user)
+}
+
