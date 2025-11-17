@@ -5,8 +5,6 @@ import (
 	"http/internal/models"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 )
 
 type WebHandler struct {
@@ -99,35 +97,4 @@ func (wh *WebHandler) renderTemplate(w http.ResponseWriter, tmpl string, data in
 	log.Printf("Successfully rendered template: %s", tmpl)
 }
 
-func (wh *WebHandler) ServeStaticFiles(w http.ResponseWriter, r *http.Request) {
-	// Security: Prevent directory traversal
-	if r.URL.Path == "/static/" {
-		http.NotFound(w, r)
-		return
-	}
-	
-	// Strip "/static" prefix and serve from web/static directory
-	path := r.URL.Path[len("/static/"):]
-	
-	// Try different possible static file locations
-	possiblePaths := []string{
-		filepath.Join("web/static", path),
-		filepath.Join("./web/static", path),
-		filepath.Join("../web/static", path),
-	}
-	
-	for _, filePath := range possiblePaths {
-		if _, err := os.Stat(filePath); err == nil {
-			log.Printf("Serving static file: %s", filePath)
-			
-			// Set caching headers for static assets
-			w.Header().Set("Cache-Control", "public, max-age=3600") // 1 hour
-			http.ServeFile(w, r, filePath)
-			return
-		}
-	}
-	
-	// File not found
-	log.Printf("Static file not found: %s", path)
-	http.NotFound(w, r)
-}
+
