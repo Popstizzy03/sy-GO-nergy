@@ -1,8 +1,6 @@
-{% extends "base.html" %}
+{{define "title"}}Add User - Go Server{{end}}
 
-{% block title %}Add User - Go Server{% endblock %}
-
-{% block content %}
+{{define "content"}}
 <div class="form-container">
     <h1>Add New User</h1>
     
@@ -53,4 +51,4 @@ document.getElementById('createUserForm').addEventListener('submit', async funct
     }
 });
 </script>
-{% endblock %}
+{{end}}

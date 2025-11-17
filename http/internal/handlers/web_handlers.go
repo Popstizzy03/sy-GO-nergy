@@ -29,84 +29,22 @@ func NewWebHandler(userHandler *UserHandler) *WebHandler {
 }
 
 func (wh *WebHandler) loadTemplates() error {
-	// Try different possible template locations
-	possiblePaths := []string{
-		"web/templates/*.html",
-		"./web/templates/*.html",
-		"../web/templates/*.html",
-	}
-	
-	var tmpl *template.Template
-	var err error
-	
-	for _, path := range possiblePaths {
-		log.Printf("Trying to load templates from: %s", path)
-		
-		// Check if any files match this pattern
-		matches, _ := filepath.Glob(path)
-		if len(matches) > 0 {
-			log.Printf("Found template files: %v", matches)
-			tmpl, err = template.ParseGlob(path)
-			if err == nil {
-				wh.templates = tmpl
-				log.Printf("Successfully loaded templates from: %s", path)
-				return nil
-			}
-		}
-	}
-	
-	// If we get here, try manual loading as fallback
-	log.Printf("Trying manual template loading...")
-	return wh.loadTemplatesManually()
-}
+	// Define the path to the templates directory
+	templatesPath := "web/templates/*.html"
 
-func (wh *WebHandler) loadTemplatesManually() error {
-	// List all template files we expect
-	templateFiles := []string{
-		"base.html",
-		"index.html", 
-		"users.html",
-		"create-user.html",
+	// Log the path for debugging
+	log.Printf("Loading templates from: %s", templatesPath)
+
+	// Parse all template files in the directory
+	tmpl, err := template.ParseGlob(templatesPath)
+	if err != nil {
+		log.Printf("Error parsing templates: %v", err)
+		return err
 	}
-	
-	tmpl := template.New("").Funcs(template.FuncMap{
-		"upper": func(s string) string {
-			if len(s) > 0 {
-				return string(s[0])
-			}
-			return s
-		},
-	})
-	
-	basePath := "web/templates/"
-	
-	// Try to parse each template file individually
-	for _, filename := range templateFiles {
-		filePath := filepath.Join(basePath, filename)
-		
-		// Check if file exists
-		if _, err := os.Stat(filePath); os.IsNotExist(err) {
-			log.Printf("Template file does not exist: %s", filePath)
-			continue
-		}
-		
-		// Read and parse the template
-		content, err := os.ReadFile(filePath)
-		if err != nil {
-			log.Printf("Error reading template %s: %v", filename, err)
-			continue
-		}
-		
-		_, err = tmpl.Parse(string(content))
-		if err != nil {
-			log.Printf("Error parsing template %s: %v", filename, err)
-			return err
-		}
-		
-		log.Printf("Successfully loaded template: %s", filename)
-	}
-	
+
+	// Assign the parsed templates to the handler
 	wh.templates = tmpl
+	log.Println("Successfully loaded templates")
 	return nil
 }
 
@@ -150,8 +88,8 @@ func (wh *WebHandler) renderTemplate(w http.ResponseWriter, tmpl string, data in
 	// Set HTML content type
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	
-	// Execute the template
-	err := wh.templates.ExecuteTemplate(w, tmpl, data)
+	// Execute the "base" template, which will in turn render the content of the specific template
+	err := wh.templates.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		log.Printf("Error rendering template %s: %v", tmpl, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

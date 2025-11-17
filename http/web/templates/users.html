@@ -1,19 +1,17 @@
-{% extends "base.html" %}
+{{define "title"}}Users - Go Server{{end}}
 
-{% block title %}Users - Go Server{% endblock %}
-
-{% block content %}
+{{define "content"}}
 <div class="page-header">
     <h1>User Management</h1>
     <a href="/users/create" class="btn btn-primary">Add New User</a>
 </div>
 
 <div class="users-grid">
-    {% if .Users }}
-        {% range .Users }}
+    {{if .Users}}
+        {{range .Users}}
         <div class="user-card">
             <div class="user-avatar">
-                {{slice .Name 0 1 | upper}}
+                {{.Initial}}
             </div>
             <div class="user-info">
                 <h3>{{.Name}}</h3>
@@ -24,13 +22,13 @@
                 <button class="btn btn-small" onclick="viewUser({{.ID}})">View</button>
             </div>
         </div>
-        {% end %}
-    {% else %}
+        {{end}}
+    {{else}}
         <div class="empty-state">
             <h3>No Users Found</h3>
             <p>Get started by adding your first user!</p>
             <a href="/users/create" class="btn btn-primary">Add User</a>
         </div>
-    {% end %}
+    {{end}}
 </div>
-{% endblock %}
+{{end}}

@@ -1,8 +1,6 @@
-{% extends "base.html" %}
+{{define "title"}}Home - Go Server{{end}}
 
-{% block title %}Home - Go Server{% endblock %}
-
-{% block content %}
+{{define "content"}}
 <div class="hero">
     <h1>Welcome to Your Go Web Server!</h1>
     <p class="hero-subtitle">A simple web application built with Go</p>
@@ -26,4 +24,4 @@
         <p>Works on all devices</p>
     </div>
 </div>
-{% endblock %}
+{{end}}
