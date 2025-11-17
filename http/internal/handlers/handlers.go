@@ -92,10 +92,15 @@ func NewRouter() *mux.Router {
 	userHandler := NewUserHandler()
 	webHandler := NewWebHandler(userHandler)
 
-	// Static files
+	// Web routes
 	router.HandleFunc("/", webHandler.HomePage).Methods("GET")
 	router.HandleFunc("/users", webHandler.UsersPage).Methods("GET")
 	router.HandleFunc("/users/create", webHandler.CreateUserPage).Methods("GET")
+	
+	// Serve static files
+	staticFileDirectory := http.Dir("./web/static/")
+	staticFileServer := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
+	router.PathPrefix("/static/").Handler(staticFileServer)
 	
 	// API routes
 	api := router.PathPrefix("/api/v1").Subrouter()
