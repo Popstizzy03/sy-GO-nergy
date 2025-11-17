@@ -10,6 +10,18 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+// Add methods for template formatting
+func (u User) initial() string {
+	if len(u.Name) > 0 {
+		return string(u.name[0])
+	}
+	return "?"
+}
+
+func (u User) FormatCreatedAt() string {
+	return u.CreatedAt.Format("Jan 2, 2006")
+}
+
 type HealthResponse struct {
 	Status    string    `json:"status"`
 	Timestamp time.Time `json:"timestamp"`
