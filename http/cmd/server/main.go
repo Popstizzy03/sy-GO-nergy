@@ -2,7 +2,6 @@ package main
 
 import (
    	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +10,6 @@ import (
 	"time"
 
 	"http/internal/handlers"
-	"http/internal/server"
 )
 
 func main() {
@@ -19,6 +17,11 @@ func main() {
 	router := handlers.NewRouter()
 
 	// Create HTTP server
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+
 	go func() {
 		log.Printf("Server starting on :%s\n", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
